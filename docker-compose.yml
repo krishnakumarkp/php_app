@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+    lamp-network:
+    
+services:
+    web-server:
+        image: krishnakumarkp/blog-php
+        ports: 
+            - "80:80"
+        links:
+            - blog-mysql
+        networks:
+            - lamp-network
+    blog-mysql:
+        image: krishnakumarkp/blog-mysql
+        ports: 
+            - "3306:3306"
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 12345678
+        volumes:
+            - ./conf:/etc/mysql/conf.d
+            - persistent:/var/lib/mysql
+        networks:
+            - lamp-network
+volumes:
+    persistent:
